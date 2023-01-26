@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: payment
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:postgresql://localhost:5432/payment
+    username: postgres
+    password: gernika54
+server:
+  port: 8003
+  servlet:
+    context-path: /payment/api/

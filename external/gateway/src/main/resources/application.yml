@@ -1,0 +1,29 @@
+server:
+  port: ${env.PORT:8080}
+
+spring:
+  application:
+    name: ${env.SERVICE_NAME:gateway}
+  config:
+    import: "optional:configserver:"
+  cloud:
+    config:
+      fail-fast: true
+      discovery:
+        enabled: true
+        service-id: config-server
+      retry:
+        initialInterval: 2000
+        multiplier: 1.5
+        maxInterval: 60000
+        maxAttempts: 100
+
+eureka:
+  client:
+    service-url:
+      enabled: true
+      fetch-registry: true
+      register-with-eureka: true
+      defaultZone: ${env.EUREKA_URI:http://localhost:8761/eureka/}
+  instance:
+    lease-renewal-interval-in-seconds: 10

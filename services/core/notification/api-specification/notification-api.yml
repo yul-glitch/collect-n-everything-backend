@@ -1,0 +1,48 @@
+openapi: 3.0.1
+info:
+  title: MNS
+  description: 'MNS notification'
+  version: 1.0.0
+servers:
+  - url: http://localhost:8007/com/diy/notification/v1
+tags:
+  - name: notification
+    description: Everything about notification
+paths:
+  /notification/send:
+    post:
+      tags:
+        - notification
+      summary: Send an sms
+      description: Send an sms with twilio
+      operationId: sendNotification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SMS'
+      responses:
+        200:
+          description: Successful operation
+          content:
+            { }
+        404:
+          description: Invalid request
+          content: { }
+
+components:
+  schemas:
+    SMS:
+      type: object
+      properties:
+        notificationId:
+          type: integer
+          format: int64
+        customerId:
+          type: integer
+          format: int64
+        message:
+          type: string
+        phoneNumber:
+          type: string

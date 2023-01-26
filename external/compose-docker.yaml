@@ -1,0 +1,123 @@
+services:
+
+  # postgres:
+  #   container_name: postgres
+  #   build:
+  #     context: ./db
+  #   environment:
+  #     POSTGRES_USER: ${DB_USER}
+  #     POSTGRES_PASSWORD: ${DB_PASS}
+  #     PGDATA: /data/postgres
+  #     TZ: Europe/Paris
+  #     PGTZ: Europe/Paris
+  #   ports:
+  #     - ${POSTGRES_PORT:-5432}:5432
+  
+  # rabbitmq:
+  #   image: rabbitmq:3.9.11-management-alpine
+  #   container_name: rabbitmq
+  #   ports:
+  #     - 5672:5672
+  #     - 15672:15672
+  #   networks:
+  #     - spring
+
+  eureka:
+    build:
+      context: ./eureka-server
+    container_name: eureka-server
+    hostname: eureka-server
+    environment:
+      SPRING_PROFILES_ACTIVE: $PROFILE
+    ports:
+      - 8761:8761
+    networks:
+      - spring
+
+  config-server:
+    build:
+      context: ./config-server
+    container_name: config-server
+    hostname: config-server
+    environment:
+      SPRING_PROFILES_ACTIVE: "${PROFILE}, native"
+    networks:
+      - spring
+
+  gateway:
+    build:
+      context: ./gateway
+    hostname: gateway
+    container_name: gateway
+    environment:
+      SPRING_PROFILES_ACTIVE: $PROFILE
+    networks:
+      - spring
+
+  # authentication-service:
+  #   build:
+  #     args:
+  #       SERVICE_NAME: authentication
+  #     context: .
+  #     dockerfile: Dockerfile.prod
+  #   container_name: authentication-service
+
+  # service-customer:
+  #   build:
+  #     args:
+  #       SERVICE_NAME: customer
+  #     context: .
+  #     dockerfile: Dockerfile.prod
+  #   container_name: service-customer
+  #   networks:
+  #     - spring
+  #   depends_on:
+  #     - eureka
+
+  # service-order:
+  #   build:
+  #     args:
+  #       SERVICE_NAME: order
+  #     context: .
+  #     dockerfile: Dockerfile.prod
+  #   container_name: service-order
+  #   networks:
+  #     - spring
+  #   depends_on:
+  #     - eureka
+
+  # service-store:
+  #   build:
+  #     args:
+  #       SERVICE_NAME: store
+  #     context: .
+  #     dockerfile: Dockerfile.prod
+  #   container_name: service-store
+  #   networks:
+  #     - spring
+  #   depends_on:
+  #     - eureka
+
+  # service-product:
+  #   build:
+  #     args:
+  #       SERVICE_NAME: product
+  #     context: .
+  #     dockerfile: Dockerfile.prod
+  #   container_name: service-product
+  #   networks:
+  #     - spring
+  #   depends_on:
+  #     - eureka
+
+  # test:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.test
+  #   container_name: test
+  #   hostname: test
+  #   networks:
+  #     - spring
+
+networks:
+  spring:

@@ -1,0 +1,333 @@
+openapi: 3.0.1
+info:
+  title: MNS
+  description: 'MNS product'
+  version: 1.0.0
+servers:
+  - url: http://localhost:8009/com/diy/product/v1
+tags:
+  - name: product
+    description: Everything about products
+paths:
+
+  /products/storeid/{storeid}:
+    get:
+      tags:
+        - product
+      summary: Find all product according to its store id
+      description: Get all product related to a store
+      operationId: getAllProductByStoreId
+      parameters:
+        - name: storeid
+          in: path
+          description: Store ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductWithoutCategory'
+        404:
+          description: Invalid request
+          content: { }
+
+  /product/{productid}:
+    get:
+      tags:
+        - product
+      summary: Find a specific product with its ID
+      description: Get a product by id
+      operationId: findProductById
+      parameters:
+        - name: productid
+          in: path
+          description: Product ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductWithoutCategory'
+        404:
+          description: Invalid request
+          content: { }
+
+    delete:
+      tags:
+        - product
+      summary: Delete a product
+      description: Delete a product by ID
+      operationId: deleteProductById
+      parameters:
+        - name: productid
+          in: path
+          description: Product ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+
+        404:
+          description: Invalid request
+          content: { }
+
+  /product:
+    post:
+      tags:
+        - product
+      summary: Create or update a product
+      description: Get a product object and potentially a category object nested, from the body
+      operationId: saveProduct
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductWithoutCategory'
+        404:
+          description: Invalid request
+          content: { }
+
+  /categories/store/{storeid}:
+    get:
+      tags:
+        - category
+      summary: Find all categories according to its store id
+      description: Get all categories related to a store
+      operationId: getAllCategoryByStoreId
+      parameters:
+        - name: storeid
+          in: path
+          description: Store ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryWithoutProduct'
+        404:
+          description: Invalid request
+          content: { }
+
+  /category/{storeid}/{categoryid}:
+    get:
+      tags:
+        - category
+      summary: find a category by ID and all its product associated
+      description: Get a single category and all its product associated. According to a specific store id
+      operationId: getCategoryAndItsProductByStoreId
+      parameters:
+        - name: storeid
+          in: path
+          description: Store ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: categoryid
+          in: path
+          description: Category ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryWithProduct'
+        404:
+          description: Invalid request
+          content: { }
+
+  /category/{categoryid}:
+    delete:
+      tags:
+        - category
+      summary: Delete a category
+      description: Delete a category by ID
+      operationId: deleteCategoryById
+      parameters:
+        - name: categoryid
+          in: path
+          description: Category ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+
+        404:
+          description: Invalid request
+          content: { }
+
+  /category:
+    post:
+      tags:
+        - category
+      summary: Create or update a category
+      description: Get a category object and save it
+      operationId: saveCategory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryWithoutProduct'
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryWithoutProduct'
+        404:
+          description: Invalid request
+          content: { }
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        productId:
+          type: integer
+          format: int64
+        name:
+          type: string
+        price:
+          type: number
+          format: float
+
+        description:
+          type: string
+        weight:
+          type: number
+          format: float
+
+        height:
+          type: number
+          format: float
+
+        photo:
+          type: string
+        availableInStore:
+          type: boolean
+        storeId:
+          type: integer
+          format: int64
+        category:
+          $ref: '#/components/schemas/Category'
+
+    ProductWithoutCategory:
+      type: object
+      properties:
+        productId:
+          type: integer
+          format: int64
+        name:
+          type: string
+        price:
+          type: number
+          format: float
+        description:
+          type: string
+        weight:
+          type: number
+          format: float
+        height:
+          type: number
+          format: float
+        photo:
+          type: string
+        availableInStore:
+          type: boolean
+        storeId:
+          type: integer
+          format: int64
+
+    Category:
+      type: object
+      properties:
+        categoryId:
+          type: integer
+          format: int64
+        name:
+          type: string
+        storeId:
+          type: integer
+          format: int64
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+
+    CategoryWithoutProduct:
+      type: object
+      properties:
+        categoryId:
+          type: integer
+          format: int64
+        name:
+          type: string
+        storeId:
+          type: integer
+          format: int64
+
+    CategoryWithProduct:
+      type: object
+      properties:
+        categoryId:
+          type: integer
+          format: int64
+        name:
+          type: string
+        storeId:
+          type: integer
+          format: int64
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductWithoutCategory'
+

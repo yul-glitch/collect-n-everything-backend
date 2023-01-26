@@ -1,0 +1,157 @@
+openapi: 3.0.1
+info:
+  title: MNS
+  description: 'MNS customisation'
+  version: 1.0.0
+servers:
+  - url: http://localhost:8002/com/diy/customisation/v1
+tags:
+  - name: customisation
+    description: Everything about store's customisation
+paths:
+  /customisations/{storeId}:
+    get:
+      tags:
+        - customisation
+      summary: Find all customisation setup related to a store
+      description: Get all customisation
+      operationId: findCustomisationByStoreId
+      parameters:
+        - name: storeId
+          in: path
+          description: The store id we want those customisation to be attached to
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customisation'
+        404:
+          description: Invalid request
+          content: { }
+
+  /customisation/{customisationId}:
+    get:
+      tags:
+        - customisation
+      summary: Find a customisation
+      description: Get a customisation according to its id
+      operationId: findCustomisationById
+      parameters:
+        - name: customisationId
+          in: path
+          description: The customisation id we want
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Customisation'
+        404:
+          description: Invalid request
+          content: { }
+
+    delete:
+      tags:
+        - customisation
+      summary: Delete a customisation
+      description: Delete an customisation by ID
+      operationId: deleteCustomisationById
+      parameters:
+        - name: customisationId
+          in: path
+          description: customisation ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+
+        404:
+          description: Invalid request
+          content: { }
+
+  /customisation:
+    post:
+      tags:
+        - customisation
+      summary: Update a customisation
+      description: Update an existing customisation
+      operationId: updateCustomisation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customisation'
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customisation'
+        404:
+          description: Invalid request
+          content: { }
+
+    put:
+      tags:
+        - customisation
+      summary: Create a customisation
+      description: Create a customisation
+      operationId: createCustomisation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customisation'
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customisation'
+        404:
+          description: Invalid request
+          content: { }
+
+components:
+  schemas:
+    Customisation:
+      type: object
+      properties:
+        customisationId:
+          type: integer
+          format: int64
+        colorBackground:
+          type: string
+        colorButton:
+          type: string
+        font:
+          type: string
+        catchPhrase:
+          type: string
+        storeId:
+          type: integer
+          format: int64

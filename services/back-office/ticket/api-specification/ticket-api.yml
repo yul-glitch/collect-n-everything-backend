@@ -1,0 +1,15 @@
+openapi: 3.0.1
+info:
+  title: MNS
+  description: 'MNS ticket'
+  version: 1.0.0
+servers:
+  - url: http://localhost:8005/com/diy/ticket/v1
+tags:
+  - name: ticket
+    description: Everything about store's and customer's tickets
+paths:
+  /path:
+
+components:
+  schemas:

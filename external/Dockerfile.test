@@ -1,0 +1,30 @@
+FROM debian:bookworm-slim
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install -y \
+    git \
+    curl \
+    net-tools \
+    nmap \
+    ninja-build \
+    gettext \
+    libtool \
+    libtool-bin \
+    autoconf \
+    automake \
+    cmake \
+    g++ \
+    pkg-config \
+    unzip \
+    doxygen \
+    zsh \
+    iputils-ping \
+    direnv
+
+RUN git clone --depth 1 https://git.ars-virtualis.org/yul/dotconf /root/dotfiles
+#ENV DOTFILES=/root/dotfiles
+#RUN echo "#!/bin/sh\nexport DOTFILES=${DOTFILES}\nsource /root/dotfiles/zsh/.zshrc" > /root/.zshrc
+#RUN /bin/zsh -c "source /root/.zshrc"
+#ENV GITHUB_REPOS="/root/.cache/Reps"
+#RUN mkdir -p ${GITHUB_REPOS}
+ENTRYPOINT ["/bin/zsh"]

@@ -1,0 +1,23 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      override-system-properties: true
+      server:
+        native:
+          search-locations: "file://${CONFIG_DIR:@project-root@/src/main/resources/config}"
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${env.EUREKA_URI:http://localhost:8761/eureka/}
+      fetch-registry: true
+      register-with-eureka: true
+    registryFetchIntervalSeconds: 5
+  instance:
+    lease-renewal-interval-in-seconds: 25
+    lease-expiration-duration-in-seconds: 10

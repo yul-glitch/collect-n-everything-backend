@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: product
+  jpa:
+    show-sql: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/product
+    username: postgres
+    password: gernika54
+server:
+  port: 8009
+  servlet:
+    context-path: /product/api/
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: api-docs

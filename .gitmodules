@@ -1,0 +1,3 @@
+[submodule "external"]
+	path = external
+	url = https://git.ars-virtualis.org/yul/ce-cfg-external

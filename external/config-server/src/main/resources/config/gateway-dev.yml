@@ -1,0 +1,64 @@
+# spring:
+#   cloud:
+#     gateway:
+#       globalcors:
+#         corsConfigurations:
+#           "[/**]":
+#             allowedOrigins: "*"
+#             allowedHeaders:
+#               - content-type
+#               - Authorization
+#               - Access-Control-Request-Method
+#               - Access-Control-Request-Headers
+#             allowedMethods:
+#               - GET
+#               - POST
+#               - DELETE
+#               - PUT
+# 
+#       routes:
+#         - id: customer
+#           uri: lb://CUSTOMER
+#           predicates:
+#             - Path=/customer/api/**
+#         - id: product
+#           uri: lb://PRODUCT
+#           predicates:
+#             - Path=/product/api/**
+#           filters:
+#             - AuthorizationFilter
+#         - id: authentification
+#           uri: lb://AUTHENTIFICATION
+#           predicates:
+#             - Path=/auth/api/**
+#         - id: customisation
+#           uri: lb://CUSTOMISATION
+#           predicates:
+#             - Path=/customisation/api/**
+#         - id: payment
+#           uri: lb://PAYMENT
+#           predicates:
+#             - Path=/payment/api/**
+#         - id: subscription
+#           uri: lb://SUBSCRIPTION
+#           predicates:
+#             - Path=/subscription/api/**
+#         - id: ticket
+#           uri: lb://TICKET
+#           predicates:
+#             - Path=/ticket/api/**
+#         - id: notification
+#           uri: lb://NOTIFICATION
+#           predicates:
+#             - Path=/notification/api/**
+#         - id: order
+#           uri: lb://ORDER
+#           predicates:
+#             - Path=/order/api/**
+#         - id: store
+#           uri: lb://STORE
+#           predicates:
+#             - Path=/store/api/**
+
+server:
+  port: 8082

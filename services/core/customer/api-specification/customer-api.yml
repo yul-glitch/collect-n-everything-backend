@@ -1,0 +1,182 @@
+openapi: 3.0.1
+info:
+  title: MNS
+  description: 'MNS customer'
+  version: 1.0.0
+servers:
+  - url: http://localhost:8006/com/diy/customer/v1
+tags:
+  - name: customer
+    description: Everything about customers
+paths:
+  /customer/{customerId}:
+    get:
+      tags:
+        - customer
+      summary: Find customer by id
+      description: Get a customer by its id
+      operationId: findCustomerById
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        404:
+          description: Invalid request
+          content: { }
+
+    delete:
+      tags:
+        - customer
+      summary: Delete a customer
+      description: Delete an customer by ID
+      operationId: deleteCustomerById
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+
+        404:
+          description: Invalid request
+          content: { }
+
+  /customer/{storeId}:
+    get:
+      tags:
+        - customer
+      summary: Find all customers with a given storeId
+      description: Get all customers by its storeId
+      operationId: findCustomersByStoreId
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+        404:
+          description: Invalid request
+          content: { }
+
+    delete:
+      tags:
+        - customer
+      summary: Delete all customers by storeId
+      description: Delete an customer by storeId
+      operationId: deleteCustomersByStoresId
+      parameters:
+        - name: storeId
+          in: path
+          description: Store ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+
+        404:
+          description: Invalid request
+          content: { }
+
+  /customer:
+    put:
+      tags:
+        - customer
+      summary: Create a customer
+      description: Create a customer
+      operationId: createCustomer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        404:
+          description: Invalid request
+          content: { }
+
+    post:
+      tags:
+        - customer
+      summary: Update a customer
+      description: Update a customer
+      operationId: updateCustomer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        404:
+          description: Invalid request
+          content: { }
+
+
+components:
+  schemas:
+    Customer:
+      type: object
+      properties:
+        customerId:
+          type: integer
+          format: int64
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+        storeId:
+          type: integer
+          format: int64

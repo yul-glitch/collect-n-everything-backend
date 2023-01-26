@@ -1,0 +1,290 @@
+openapi: 3.0.1
+info:
+  title: MNS
+  description: 'MNS order'
+  version: 1.0.0
+servers:
+  - url: http://localhost:8008/com/diy/order/v1
+tags:
+  - name: order
+    description: Everything about orders
+paths:
+
+  /orders/store/{storeid}:
+    get:
+      tags:
+        - order
+      summary: Find all orders for a given store
+      description: Get all orders for a given store
+      operationId: findOrdersByStoreId
+      parameters:
+        - name: storeid
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderWithoutPurchase'
+        404:
+          description: Invalid request
+          content: { }
+
+
+  /orders/customer/{customerId}:
+    get:
+      tags:
+        - order
+      summary: Find all orders for a given store
+      description: Get all orders for a given customer
+      operationId: findOrdersByCustomerId
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderWithoutPurchase'
+        404:
+          description: Invalid request
+          content: { }
+
+
+  /order/{orderId}:
+    get:
+      tags:
+        - order
+      summary: Find order by id
+      description: Get an order by its id
+      operationId: findOrderById
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderWithoutPurchase'
+        404:
+          description: Invalid request
+          content: { }
+    delete:
+      tags:
+        - order
+      summary: Delete a store
+      description: Delete an order by ID
+      operationId: deleteOrderById
+      parameters:
+        - name: orderId
+          in: path
+          description: Order ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+
+        404:
+          description: Invalid request
+          content: { }
+
+
+  /order:
+    post:
+      tags:
+        - order
+      summary: Update an order
+      description: Update an order with his purchases
+      operationId: updateOrder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        404:
+          description: Invalid request
+          content: {}
+
+  /order/{storeId}/{customerId}:
+    put:
+      tags:
+        - order
+      summary: Create an order
+      description: Create an order according to a list of purchase in entry
+      operationId: createOrder
+      parameters:
+        - name: storeId
+          in: path
+          description: Store ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: customerId
+          in: path
+          description: Customer ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/PurchaseWithoutOrder'
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderWithoutPurchase'
+        404:
+          description: Invalid request
+          content: { }
+
+  /order/status:
+    put:
+      tags:
+        - order
+      summary: Update the status of an order
+      description: Update the status of an order according to its id
+      operationId: updateOrderStatus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderStatus'
+
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+        404:
+          description: Invalid request
+          content: { }
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        orderId:
+          type: integer
+          format: int64
+        totalPrice:
+          type: number
+        orderPayed:
+          type: boolean
+        status:
+          type: string
+        assignedTo:
+          type: integer
+          format: int64
+        storeId:
+          type: integer
+          format: int64
+        customerId:
+          type: integer
+          format: int64
+        purchases:
+          type: array
+          items:
+            $ref: '#/components/schemas/Purchase'
+
+    OrderStatus:
+      type: object
+      properties:
+        orderId:
+          type: integer
+          format: int64
+        status:
+          type: string
+
+    OrderWithoutPurchase:
+      type: object
+      properties:
+        orderId:
+          type: integer
+          format: int64
+        totalPrice:
+          type: number
+        orderPayed:
+          type: boolean
+        status:
+          type: string
+        assignedTo:
+          type: integer
+          format: int64
+        storeId:
+          type: integer
+          format: int64
+        customerId:
+          type: integer
+          format: int64
+
+    Purchase:
+      type: object
+      properties:
+        purchaseId:
+          type: integer
+          format: int64
+        price:
+          type: number
+        productId:
+          type: integer
+          format: int64
+
+    PurchaseWithoutOrder:
+      type: object
+      properties:
+        purchaseId:
+          type: integer
+          format: int64
+        price:
+          type: number
+        productId:
+          type: integer
+          format: int64

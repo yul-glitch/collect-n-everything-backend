@@ -1,0 +1,291 @@
+openapi: 3.0.1
+info:
+  title: MNS
+  description: 'MNS store'
+  version: 1.0.0
+servers:
+  - url: http://localhost:8001/com/diy/store/v1
+tags:
+  - name: store
+    description: Everything about store, dixit the merchant.
+paths:
+
+  /stores:
+    get:
+      tags:
+        - store
+      summary: Find all stores
+      description: Get all stores
+      operationId: findStores
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Store'
+        404:
+          description: Invalid request
+          content: {}
+
+  /store/id/{storeId}:
+    get:
+      tags:
+        - store
+      summary: Find a specific store with its ID
+      description: Get a store by id
+      operationId: findStoreById
+      parameters:
+          - name: storeId
+            in: path
+            description: Store ID
+            required: true
+            schema:
+                type: integer
+                format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Store'
+        404:
+          description: Invalid request
+          content: {}
+
+    delete:
+      tags:
+        - store
+      summary: Delete a store
+      description: Delete a store by ID with all its dependencies in other microservices
+      operationId: deleteStoreById
+      parameters:
+        - name: storeId
+          in: path
+          description: Store ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+
+        404:
+          description: Invalid request
+          content: { }
+
+  /store:
+    post:
+      tags:
+        - store
+      summary: Create or update a store
+      description: Get a store object and potentially an address object nested, from the body
+      operationId: saveStore
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Store'
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Store'
+        404:
+          description: Invalid request
+          content: {}
+
+  /store/{storename}:
+    get:
+      tags:
+        - store
+      summary: Find a specific store with its ID
+      description: Get a store by name, namely for ms communication
+      operationId: findStoreByStoreName
+      parameters:
+        - name: storename
+          in: path
+          description: Store' name
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Store'
+        404:
+          description: Invalid request
+          content: { }
+
+  /address/{storeid}:
+    get:
+      tags:
+        - store
+      summary: Find all address related to a store
+      description: Get all stores
+      operationId: findAddressesByStoreId
+      parameters:
+        - name: storeid
+          in: path
+          description: The store id we want those addresses to be attached to
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Address'
+        404:
+          description: Invalid request
+          content: { }
+
+    post:
+      tags:
+        - store
+      summary: Create or update an address
+      description: Get an address and create it or update it.
+      operationId: saveAddress
+      parameters:
+        - name: storeid
+          in: path
+          description: store ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Address'
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+        404:
+          description: Invalid request
+          content: { }
+
+  /address/{addressid}:
+    get:
+      tags:
+        - store
+      summary: Find a specific address with its ID
+      description: Get an address by id
+      operationId: findAddressById
+      parameters:
+        - name: addressid
+          in: path
+          description: Address ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+        404:
+          description: Invalid request
+          content: { }
+
+    delete:
+      tags:
+        - store
+      summary: Delete a store
+      description: Delete an address by ID
+      operationId: deleteAddressById
+      parameters:
+        - name: addressid
+          in: path
+          description: Address ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+
+        404:
+          description: Invalid request
+          content: { }
+
+
+components:
+  schemas:
+    Store:
+      type: object
+      properties:
+        storeId:
+          type: integer
+          format: int64
+        siret:
+          type: string
+        storeName:
+          type: string
+        sector:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+        subscriptionId:
+          type: integer
+          format: int64
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+
+    Address:
+      type: object
+      properties:
+        addressId:
+          type: integer
+          format: int64
+        city:
+          type: string
+        postalCode:
+          type: string
+        complement:
+          type: string
+        streetNumber:
+          type: string
+        streetName:
+          type: string

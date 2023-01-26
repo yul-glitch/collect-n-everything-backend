@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: authentification
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:postgresql://localhost:5432/authentication
+    username: postgres
+    password: gernika54
+server:
+  port: 8000
+  servlet:
+    context-path: /auth/api/
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html

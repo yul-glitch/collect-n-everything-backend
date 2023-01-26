@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>service-bom</artifactId>
+        <groupId>com.diy</groupId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>config/maven/service-bom.xml</relativePath>
+    </parent>
+    <artifactId>service-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <description>Parent POM for all modules</description>
+    <modules>
+        <module>services/config/authentication</module>
+        <module>services/config/clients</module>
+        <module>services/config/rabbitMQ</module>
+        <module>services/core/customer</module>
+        <module>services/core/notification</module>
+        <module>services/core/order</module>
+        <module>services/core/product</module>
+        <module>services/core/store</module>
+        <module>services/back-office/customisation</module>
+        <module>services/back-office/payment</module>
+        <module>services/back-office/subscription</module>
+        <module>services/back-office/ticket</module>
+    </modules>
+</project>

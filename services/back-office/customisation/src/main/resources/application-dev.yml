@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: customisation
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:postgresql://localhost:5432/customisation
+    username: postgres
+    password: gernika54
+server:
+  port: 8002
+  servlet:
+    context-path: /customisation/api/

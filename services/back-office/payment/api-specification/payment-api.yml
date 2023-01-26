@@ -1,0 +1,15 @@
+openapi: 3.0.1
+info:
+  title: MNS
+  description: 'MNS payment'
+  version: 1.0.0
+servers:
+  - url: http://localhost:8003/com/diy/payment/v1
+tags:
+  - name: payment
+    description: Everything about payment
+paths:
+  /path:
+
+components:
+  schemas:

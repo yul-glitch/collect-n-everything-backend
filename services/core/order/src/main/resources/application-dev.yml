@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: order
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:postgresql://localhost:5432/orders
+    username: postgres
+    password: gernika54
+  rabbitmq:
+    addresses: localhost:5672
+server:
+  port: 8008
+  servlet:
+    context-path: /order/api/
+
+

@@ -1,0 +1,80 @@
+services:
+
+  postgres:
+    container_name: postgres
+    build:
+      context: ./db
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      PGDATA: /data/postgres
+      TZ: Europe/Paris
+      PGTZ: Europe/Paris
+    ports:
+      - ${POSTGRES_PORT:-5432}:5432
+  
+  # zookeeper:
+  #   image: "wurstmeister/zookeeper"
+  #   container_name: "zookeeper"
+  #   ports:
+  #     - "2181:2181"
+  #   environment:
+  #     - ALLOW_ANONYMOUS_LOGIN=yes
+  # 
+  # kafka:
+  #   image: "wurstmeister/kafka"
+  #   container_name: "kafka"
+  #   ports:
+  #     - "9092:9092"
+  #   environment:
+  #     - KAFKA_ZOOKEEPER_CONNECT= zookeeper:2181
+  #     - KAFKA_ADVERTISED_HOST_NAME= localhost
+  #   depends_on:
+  #     - zookeeper
+
+  rabbitmq:
+    image: rabbitmq:3.9.11-management-alpine
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - spring
+
+  rabbitmq:
+    image: rabbitmq:3.9.11-management-alpine
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - spring
+
+  eureka:
+    build:
+      args:
+        SERVICE_NAME: eureka-server
+      context: .
+    container_name: eureka-server
+    ports:
+      - 8761:8761
+    networks:
+      - spring
+    depends_on:
+      - config-server
+
+  config-server:
+    build:
+      args:
+        SERVICE_NAME: config-server 
+      context: .
+    container_name: config-server
+    environment:
+      SPRING_PROFILES_ACTIVE: native
+    ports:
+      - 8888:8888
+    networks:
+      - spring
+
+networks:
+  spring:
